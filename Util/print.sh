@@ -20,13 +20,25 @@ export NEWLINE="\n"
 
 # Welcome to EMAS! 
 function print_welcome() { 
-    printf "${SEPARATOR_LINE} \n ${COLOR_GREEN} \t\t     Emerging Memory Architecture Simulator ${COLOR_NONE}\n${SEPARATOR_LINE} \n"
+    printf "\n${SEPARATOR_LINE} \n ${COLOR_GREEN} \t\t     Emerging Memory Architecture Simulator ${COLOR_NONE}\n${SEPARATOR_LINE} \n\n"
 }
 
 # Print an informational message 
 # 1 --> messasge string 
 function print_message() { 
-    printf "${COLOR_YELLOW} [Info] ${COLOR_NONE} ${1}\n"
+    printf "${COLOR_GRAY} [Info] ${COLOR_NONE} ${1}\n"
+}
+
+# Print a success message 
+# 1 --> messasge string 
+function print_success() { 
+    printf "${COLOR_GREEN} [Success] ${COLOR_NONE}${1}\n"
+}
+
+# Print a warning message 
+# 1 --> messasge string 
+function print_warning() { 
+    printf "${COLOR_YELLOW} [Warning] ${COLOR_NONE}${1}\n"
 }
 
 # Print an error message 

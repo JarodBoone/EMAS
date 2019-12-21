@@ -14,3 +14,6 @@ export WORK_DIRECTORY="${BASE_DIRECTORY}/Work"
 
 # The absolute directory of shell utilities 
 export UTIL_DIRECTORY="${BASE_DIRECTORY}/Util"
+
+# The absolute directory of shell utilities 
+export SCENARIO_DIRECTORY="${BASE_DIRECTORY}/Scenarios"

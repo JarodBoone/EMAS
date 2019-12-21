@@ -26,5 +26,6 @@ Technology
 - Installed latest version of gem5 to **base/Simulator/GEM5/gem5**. Removed Git and mercurial version control (hooks and version history) but keep gitignore 
 - Made a basic shell interface for EMAS 
 - Implemented `build` command which is a wrapper to build gem5 
+    - Figure out where to put the scenario directory and how to manage them 
 
 
