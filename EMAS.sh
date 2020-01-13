@@ -13,15 +13,20 @@ set -e
 source "./config"
 
 # Get common utilities 
-source "${UTIL_DIRECTORY}/print.sh" # printing utilites 
-source "${UTIL_DIRECTORY}/setup.sh" # simulation setup utilities 
-source "${UTIL_DIRECTORY}/scenarios.sh" # scenario setup utilities 
+source "${INTERFACE_DIRECTORY}/common.sh" # scenario setup utilities 
+source "${INTERFACE_DIRECTORY}/print.sh" # printing utilites 
+source "${INTERFACE_DIRECTORY}/setup.sh" # simulation setup utilities 
+source "${INTERFACE_DIRECTORY}/scenarios.sh" # scenario setup utilities 
 
 #TODO: Make an EMAS_commands array and use that to source all the command scripts and 
 # check if a command is valid 
 
 # Get EMAS command functions 
-source "${UTIL_DIRECTORY}/Commands/EMAS_build.sh" # build command 
+for cmd_file in  $INTERFACE_DIRECTORY/Commands/* ; do 
+    # echo "${cmd_file}"
+    source $cmd_file
+done 
+# source "${INTERFACE_DIRECTORY}/Commands/EMAS_build.sh" # build command 
 
 print_welcome
 # print_message "$1 arguments supplied" # DEBUGGING 
@@ -29,6 +34,7 @@ print_welcome
 if [ $# -eq 0 ]; then
     print_error "No arguments given to EMAS"
     prompt_help
+    exit_EMAS
 fi
 
 # Take the lowercase version of the first bash argument as the EMAS command
@@ -37,7 +43,16 @@ export EMAS_CMD="${RAW_CMD,,}"
 
 print_message "Task Requested: ${COLOR_PURPLE}${EMAS_CMD}${COLOR_NONE}"
 
-EMAS_$EMAS_CMD
+if ! type EMAS_$EMAS_CMD &> /dev/null ; then 
+    print_error "Unrecognized task: \"${EMAS_CMD}\""
+    prompt_help
+    exit_EMAS
+fi
 
 # Shift the arguments
 shift 1
+
+# Execute the command 
+EMAS_$EMAS_CMD $@
+
+exit_EMAS

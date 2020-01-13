@@ -7,6 +7,19 @@ This is a general purpose GEM5 based simulator capable of modeling any combinati
 - Processing in Memory 
 - Non Volatile Memory 
 
+## Usage 
+
+First you need to build a scenario and it will create a build directory in the work folder then you can run that scenario. 
+
+When Building a scenario 
+- Identify valid scenario string 
+- Export build options 
+- run gem5 build into the 
+
+I probably need to limit the number of things that are built at a time 
+
+Need to nail down the scenario naming convention. `family.number`. All families have the same build? Maybe idk 
+
 ## Documentation 
 
 General overview - see docs 

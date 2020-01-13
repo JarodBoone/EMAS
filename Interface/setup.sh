@@ -1,6 +1,7 @@
 #!/bin/bash 
 # Various shell scripts to verify and setup simulation runtime 
 
+# Make sure that there is a work directory 
 function setup_work_directory() {
 
     # Check to see if the work directory exists, if it does not make one 

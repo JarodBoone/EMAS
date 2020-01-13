@@ -13,7 +13,7 @@ export GEM5_DIRECTORY="${SIMULATOR_DIRECTORY}/GEM5/gem5"
 export WORK_DIRECTORY="${BASE_DIRECTORY}/Work"
 
 # The absolute directory of shell utilities 
-export UTIL_DIRECTORY="${BASE_DIRECTORY}/Util"
+export INTERFACE_DIRECTORY="${BASE_DIRECTORY}/Interface"
 
-# The absolute directory of shell utilities 
+# The absolute directory of scenario scripts 
 export SCENARIO_DIRECTORY="${BASE_DIRECTORY}/Scenarios"
