@@ -18,6 +18,8 @@ function EMAS_build() {
     SCENARIO_NAME_RAW=$1
     echo "the raw ${SCENARIO_NAME_RAW}"
     SAVEIFS=$IFS
+
+    
     IFS="."
     read -r -a array <<< "$SCENARIO_NAME_RAW"
 
@@ -25,7 +27,7 @@ function EMAS_build() {
     if (($REQUIRED_SCENARIO_COMPONENTS != ${#array[@]})); then 
         printf "nah"
     fi 
-    
+
     for element in "${array[@]}"; do 
         echo $element
     done 
