@@ -7,6 +7,11 @@ This is a general purpose GEM5 based simulator capable of modeling any combinati
 - Processing in Memory 
 - Non Volatile Memory 
 
+## Requirements 
+
+- Gem5 build requirements 
+- Bash interpreter 
+
 ## Usage 
 
 First you need to build a scenario and it will create a build directory in the work folder then you can run that scenario. 

@@ -1,4 +1,5 @@
 #!/bin/bash
+# This bash script defines path variables to configure the EMAS interface
 
 # The absolute directory of the EMAS repository
 export BASE_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -17,3 +18,8 @@ export INTERFACE_DIRECTORY="${BASE_DIRECTORY}/Interface"
 
 # The absolute directory of scenario scripts 
 export SCENARIO_DIRECTORY="${BASE_DIRECTORY}/Scenarios"
+
+# ===================================================
+# =============== LOAD STATE VARIABLES ==============
+# ===================================================
+source "${BASE_DIRECTORY}/state"

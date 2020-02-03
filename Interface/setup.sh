@@ -1,6 +1,13 @@
 #!/bin/bash 
 # Various shell scripts to verify and setup simulation runtime 
 
+function setup_config() { 
+    if [ $__EMAS_CONFIG -eq 0 ]; then 
+        print_warning "It appears that EMAS was not previously configured on this machine"
+        
+
+}
+
 # Make sure that there is a work directory 
 function setup_work_directory() {
 

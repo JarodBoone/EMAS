@@ -23,14 +23,18 @@ source "${INTERFACE_DIRECTORY}/scenarios.sh" # scenario setup utilities
 
 # Get EMAS command functions 
 for cmd_file in  $INTERFACE_DIRECTORY/Commands/* ; do 
-    # echo "${cmd_file}"
     source $cmd_file
 done 
-# source "${INTERFACE_DIRECTORY}/Commands/EMAS_build.sh" # build command 
 
+#############################################################################################
+#################################### EMAS ###################################################
+#############################################################################################
+
+# Hello! 
 print_welcome
-# print_message "$1 arguments supplied" # DEBUGGING 
 
+
+# If there are no arguments given to EMAS then fail
 if [ $# -eq 0 ]; then
     print_error "No arguments given to EMAS"
     prompt_help
