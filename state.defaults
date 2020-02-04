@@ -7,7 +7,7 @@
 # =========================================
 
 # has EMAS been configured? 
-export __EMAS_IS_CONFIGURED=1
+export __EMAS_CONFIG=0
 
 # do we have the right directory structure?
 export __EMAS_DIR_CHECK=0

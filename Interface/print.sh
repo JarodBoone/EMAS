@@ -49,25 +49,56 @@ function print_help() {
 # Print an informational message 
 # 1 --> messasge string 
 function print_message() { 
-    printf "${COLOR_GRAY} [Info] ${COLOR_NONE} ${1}\n"
+    if [ $__VERBOSE -eq 1 ]; then 
+        if [ $__DEBUG -eq 1 ]; then 
+            printf "${COLOR_GRAY} [Info:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_GRAY}] ${COLOR_NONE} ${1}\n"
+        else 
+            printf "${COLOR_GRAY} [Info] ${COLOR_NONE} ${1}\n"
+        fi 
+    fi 
+    
 }
 
 # Print a success message 
 # 1 --> messasge string 
 function print_success() { 
-    printf "${COLOR_GREEN} [Success] ${COLOR_NONE}${1}\n"
+    if [ $__DEBUG -eq 1 ]; then 
+        printf "${COLOR_GREEN} [Success:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_GREEN}] ${COLOR_NONE}${1}\n"
+    else 
+        printf "${COLOR_GREEN} [Success] ${COLOR_NONE}${1}\n"
+    fi
+}
+
+# Print an "OK" message 
+# 1 --> messasge string 
+function print_ok() { 
+    if [ $__VERBOSE -eq 1 ]; then 
+        if [ $__DEBUG -eq 1 ]; then 
+            printf "${COLOR_GREEN} [OK:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_GREEN}] ${COLOR_NONE}${1}\n"
+        else 
+            printf "${COLOR_GREEN} [OK] ${COLOR_NONE}${1}\n"
+        fi
+    fi
 }
 
 # Print a warning message 
 # 1 --> messasge string 
 function print_warning() { 
-    printf "${COLOR_YELLOW} [Warning] ${COLOR_NONE}${1}\n"
+    if [ $__DEBUG -eq 1 ]; then 
+        printf "${COLOR_YELLOW} [Warning:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_YELLOW}] ${COLOR_NONE}${1}\n"
+    else 
+        printf "${COLOR_YELLOW} [Warning] ${COLOR_NONE}${1}\n"
+    fi
 }
 
 # Print an error message 
 # 1 --> messasge string 
 function print_error() { 
-    printf "${COLOR_RED} [Error] ${COLOR_NONE}${1}\n"
+    if [ $__DEBUG -eq 1 ]; then
+        printf "${COLOR_RED} [Error:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_RED}] ${COLOR_NONE}${1}\n"
+    else 
+        printf "${COLOR_RED} [Error] ${COLOR_NONE}${1}\n"
+    fi 
 }
 
 

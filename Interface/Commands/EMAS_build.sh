@@ -3,7 +3,6 @@
 function EMAS_build() {
     # Lets build 
     print_message "... Building Gem5"
-    setup_work_directory
 
     # Read the scenario 
     REQUIRED_ARGNUM=1

@@ -1,4 +1,4 @@
-# Default build script
+# Default
 #!/bin/bash
 # Create the scenario 
 export GEM5_SIM_MODE=opt

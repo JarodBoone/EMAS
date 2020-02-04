@@ -9,12 +9,35 @@ set -u
 # Stop script execution after we receive an error 
 set -e 
 
-# Get the configuration variables (directory locations)
+# NEED TO GET VERBOSE FLAGS HERE 
+
+# Get the configuration variables (directory locations) and state varibles
+# (reflections of EMAS state)
 source "./config"
 
+# check for output control flags 
+export __DEBUG=0
+export __VERBOSE=0
+__COUNT=1
+for var in "$@"; do
+    if [ "$var" == "--debug" ] || [ "$var" == "-dbg" ]; then 
+        set -- "${@:1:$((__COUNT - 1))}" "${@:$((__COUNT + 1)):8}"
+        __DEBUG=1
+        __VERBOSE=1
+    fi 
+
+    if [ "$var" == "--verbose" ] || [ "$var" == "-v" ]; then 
+        set -- "${@:1:$((__COUNT - 1))}" "${@:$((__COUNT + 1)):8}"
+        __VERBOSE=1
+    fi 
+
+    __COUNT=$((__COUNT + 1))
+done
+
+
 # Get common utilities 
-source "${INTERFACE_DIRECTORY}/common.sh" # scenario setup utilities 
 source "${INTERFACE_DIRECTORY}/print.sh" # printing utilites 
+source "${INTERFACE_DIRECTORY}/common.sh" # common interface utilities 
 source "${INTERFACE_DIRECTORY}/setup.sh" # simulation setup utilities 
 source "${INTERFACE_DIRECTORY}/scenarios.sh" # scenario setup utilities 
 
@@ -33,6 +56,8 @@ done
 # Hello! 
 print_welcome
 
+# Consistency and configuration checks 
+check_config # Check that we are configured 
 
 # If there are no arguments given to EMAS then fail
 if [ $# -eq 0 ]; then

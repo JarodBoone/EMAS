@@ -30,6 +30,17 @@ Need to nail down the scenario naming convention. `family.number`. All families 
 General overview - see docs 
 Usage - see docs 
 
+### Runtime 
+
+- First thing we do is include all of the shell variables. Configuration and state 
+- Passive Config check 
+- Offer active configuration
+- Need to check that state is consistent if we have configured before. Configuration consists of 
+    - Checking Installs 
+    - Checking Directory Structure 
+    - Establishing State file and locking state. (Flag configuration) 
+
+
 ## Models 
 
 Here is for specifying models and various tools for verifying them Each model should be added as a GEM5 extra 
@@ -45,5 +56,9 @@ Technology
 - Made a basic shell interface for EMAS 
 - Implemented `build` command which is a wrapper to build gem5 
     - Figure out where to put the scenario directory and how to manage them 
+
+### TODO
+
+- Use state variables or config to verify Gem5 version 
 
 
