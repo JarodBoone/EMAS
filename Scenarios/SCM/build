@@ -1,5 +1,6 @@
-# Default build script
+# Default
 #!/bin/bash
-# Create the scenario 
+
+# gem5 options 
 export GEM5_SIM_MODE=opt
 export GEM5_SIM_PLATFORM=ARM

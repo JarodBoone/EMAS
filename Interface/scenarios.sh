@@ -18,14 +18,14 @@ function list_scenarios() {
         line="${line:1}"
         line=$(echo "${line}" | awk '{$1=$1;print}')
 
-        printf "\n ==> [Family $__FAMILY_COUNT] ${COLOR_PURPLE}${scenario_family}${COLOR_NONE}: ${line}\n"
+        printf "\n ==> [Family ${COLOR_PURPLE}${scenario_family}${COLOR_NONE}] ($__FAMILY_COUNT): ${line}\n"
         
         SCENARIOS_IN_FAMILY=($(ls | sed 's:/$::'))
 
         __INSTANCE_COUNT=0
         for scenario in "${SCENARIOS_IN_FAMILY[@]}"; do 
             if [ "${scenario}" != "build" ]; then 
-                printf "\t[Instance $__INSTANCE_COUNT] ${COLOR_YELLOW}${scenario}${COLOR_NONE} ($__FAMILY_COUNT:$__INSTANCE_COUNT)\n"
+                printf "\t[Instance ${COLOR_YELLOW}${scenario}${COLOR_NONE}] ($__FAMILY_COUNT.$__INSTANCE_COUNT | $scenario_family.$__INSTANCE_COUNT) : \n"
                 __INSTANCE_COUNT=$((__INSTANCE_COUNT + 1))
             fi 
             
@@ -37,10 +37,14 @@ function list_scenarios() {
 }
 
 function scenario_exists() { 
-    if [ $# -ne 1] ; then 
+    if [ $# -ne 2] ; then 
         print_error "Internal Error: incorrect number of arguments to scenario_exists"
         exit_EMAS
     fi
+}
+
+function get_scenario() {
+    
 }
 
 # Create new scenario family 

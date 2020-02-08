@@ -59,16 +59,6 @@ function print_message() {
     
 }
 
-# Print a success message 
-# 1 --> messasge string 
-function print_success() { 
-    if [ $__DEBUG -eq 1 ]; then 
-        printf "${COLOR_GREEN} [Success:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_GREEN}] ${COLOR_NONE}${1}\n"
-    else 
-        printf "${COLOR_GREEN} [Success] ${COLOR_NONE}${1}\n"
-    fi
-}
-
 # Print an "OK" message 
 # 1 --> messasge string 
 function print_ok() { 
@@ -78,6 +68,16 @@ function print_ok() {
         else 
             printf "${COLOR_GREEN} [OK] ${COLOR_NONE}${1}\n"
         fi
+    fi
+}
+
+# Print a success message 
+# 1 --> messasge string 
+function print_success() { 
+    if [ $__DEBUG -eq 1 ]; then 
+        printf "${COLOR_GREEN} [Success:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_GREEN}] ${COLOR_NONE}${1}\n"
+    else 
+        printf "${COLOR_GREEN} [Success] ${COLOR_NONE}${1}\n"
     fi
 }
 
@@ -100,5 +100,15 @@ function print_error() {
         printf "${COLOR_RED} [Error] ${COLOR_NONE}${1}\n"
     fi 
 }
+
+function print_status() { 
+    if [ $__DEBUG -eq 1 ]; then
+        printf "${COLOR_CYAN} [Status:${COLOR_NONE}(${FUNCNAME[1]})${COLOR_CYAN}] ${COLOR_NONE}${1}\n"
+    else 
+        printf "${COLOR_CYAN} [Status] ${COLOR_NONE}${1}\n"
+    fi
+}
+
+
 
 

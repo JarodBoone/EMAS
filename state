@@ -19,4 +19,4 @@ export __BUILD_DONE=0
 export __NUM_BUILT=0
 
 # the name of the previous scenario run
-export __PREV_SCENARIO=""
+export __CURRENT_SCENARIO=Test.0

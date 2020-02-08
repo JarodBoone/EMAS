@@ -1,5 +1,17 @@
 # Default build script
 #!/bin/bash
-# Create the scenario 
-export GEM5_SIM_MODE=opt
-export GEM5_SIM_PLATFORM=ARM
+
+# Scenario family name
+export SCENARIO_FAMILY=$(basename $PWD)
+
+# Statement that prints when the build script is invoked to build gem5
+print_message "... Loading $SCENARIO_FAMILY build options"
+
+#############################################################################################
+#################################### BUILD OPTIONS ##########################################
+#############################################################################################
+
+export GEM5_SIM_MODE=opt # Type of gem5 binary to be compiled 
+export GEM5_SIM_PLATFORM=ARM # Type of architecture to compile 
+
+# Any extras to compile with? 

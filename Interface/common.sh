@@ -1,5 +1,9 @@
 #!/bin/bash 
 
+####################################################################################################
+############################## USER INTERACION #####################################################
+####################################################################################################
+
 # ask for yes or no before running a function
 # 1 --> Prompt string 
 function ask() { 
@@ -48,14 +52,24 @@ function askf() {
 ############################# STATE MANAGEMENT #####################################################
 ####################################################################################################
 
-# Function to reset state?
-
 function check_state_consistent() { 
+    __ACTIVE=$1
+
     state_hash=$(sha1sum ${STATE_FILE})
     if [[ "${state_hash}" != "$(cat $STATE_FILE_LOCK)" ]]; then 
         print_error "EMAS state corrupted. Did you change ${STATE_FILE}?"
-        print_message "You may want to reconfigure with ${COLOR_GREEN}EMAS${COLOR_NONE} ${COLOR_PURPLE}config${COLOR_NONE}"
-        exit_EMAS 
+        if [ $__ACTIVE -eq "1" ]; then 
+            
+            # askf "Would you like to configure EMAS?" EMAS_config "You have chosen to configure EMAS" exit_EMAS "You have chosen not to configure EMAS :("
+            if ask "Would you like to reconfigure EMAS?"; then
+                EMAS_config
+                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+            else 
+                return 1
+            fi        
+        else 
+            return 1
+        fi
     fi 
 }
 

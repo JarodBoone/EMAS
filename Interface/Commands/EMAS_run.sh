@@ -1,16 +1,15 @@
-#!/bin/bash
-
-function EMAS_build() {
-    print_status "Executing Build Command"
+#!/bin/bash 
+function EMAS_run() {
+    print_status "Executing ${COLOR_PURPLE}run${COLOR_NONE} Command"
     # Lets build 
-    print_message "... Building Gem5"
+    print_message "... Running Gem5"
 
     # Read the scenario 
-    REQUIRED_ARGNUM=1
+    REQUIRED_ARGNUM=0
 
-    if (($# < $REQUIRED_ARGNUM)) ; then 
-        print_error "Task ${COLOR_PURPLE}build${COLOR_NONE} requires scenario argument"
-        prompt_help
+    if (($# < 1)) ; then 
+        print_warning "Task ${COLOR_PURPLE}run${COLOR_NONE} not given scenario argument"
+        print_status "Running previously targeted scenario ${__CURRENT_SCENARIO}"
         exit_EMAS
     fi
 
@@ -77,5 +76,9 @@ function EMAS_build() {
 
     done 
 
-    popd > /dev/null    
+    popd > /dev/null
+
+    # Actually build gem5 
+
+    
 }

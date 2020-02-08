@@ -100,7 +100,6 @@ function check_scenario_directory() {
         popd > /dev/null
     done 
 
-
     return 0
 }
 
@@ -112,7 +111,11 @@ function check_scenario_directory() {
 function verify_config() { 
 
     # State consistency 
-    check_state_consistent
+    if ! check_state_consistent 1; then 
+        exit_EMAS
+    else 
+        print_ok "EMAS state is consistent"
+    fi 
 
     print_message "... Verifying that EMAS is properly configured"
 
@@ -152,9 +155,28 @@ function check_config() {
 
     # Verify that we are configured correctly. If not offer configuration
     if verify_config; then 
-         print_ok "EMAS is properly configured!"
+         print_ok "EMAS is properly configured!\n"
     else 
         print_error "It appears that EMAS is not configured properly on this machine"
         askf "Would you like to configure EMAS?" EMAS_config "You have chosen to configure EMAS" exit_EMAS "You have chosen not to configure EMAS :("
     fi 
+}
+
+#############################################################################################
+#################################### VALIDATION #############################################
+#############################################################################################
+
+# Check if a given bash variable is defined and exit EMAS if not 
+# 1 --> variable value 
+# 2 --> variable name 
+function check_variable() { 
+    __VAR_VALUE=$1
+    __VAR_NAME=$2
+
+    if [ -z ${__VAR_VALUE+x} ]; then 
+        print_error "Build Error: ${__VAR_NAME} is not set"
+        exit_EMAS
+    else 
+        print_ok "${__VAR_NAME} set to ${GEM5_SIM_PLATFORM}"
+    fi
 }

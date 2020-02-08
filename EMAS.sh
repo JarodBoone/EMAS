@@ -61,7 +61,7 @@ check_config # Check that we are configured
 
 # If there are no arguments given to EMAS then fail
 if [ $# -eq 0 ]; then
-    print_error "No arguments given to EMAS"
+    print_error "No commands given to EMAS"
     prompt_help
     exit_EMAS
 fi
