@@ -1,1 +1,4 @@
 #!/bin/bash 
+print_status "Running the scenario!"
+
+export GEM5_CONFIG_SCRIPT="${SIMULATOR_CONFIG_DIRECTORY}/fs.py"

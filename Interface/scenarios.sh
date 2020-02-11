@@ -6,7 +6,7 @@ pushd "${SCENARIO_DIRECTORY}" > /dev/null
 export SCENARIO_FAMILIES=($(ls -d */ | sed 's:/$::'))
 popd > /dev/null
 
-# List all the scenario names 
+# List all the scenario names and their corresponding indices 
 function list_scenarios() {
     printf " ${COLOR_PURPLE}Defined Scenarios${COLOR_NONE}: \n"
 
@@ -36,16 +36,117 @@ function list_scenarios() {
     done 
 }
 
-function scenario_exists() { 
-    if [ $# -ne 2] ; then 
-        print_error "Internal Error: incorrect number of arguments to scenario_exists"
+# Variables for choosing and accessing scenarios 
+export TARGET_SCENARIO_FAMILY=""
+export TARGET_SCENARIO_FAMILY_INDEX=""
+export TARGET_SCENARIO_INSTANCE=""
+
+export TARGET_SCENARIO_SCRIPT=""
+export TARGET_SCENARIO_BUILD=""
+
+export TARGET_SCENARIO_WORK_DIR=""
+
+# Function to parse a scenario name or index and set target variables
+# 1 --> string of format "family.instance" to parse
+function target_scenario() { 
+    if [ $# -ne 1 ] ; then 
+        print_error "Internal Error: incorrect number of arguments to target_scenario"
         exit_EMAS
+    fi
+
+    # 1st argument is the scenario name to parse
+    SCENARIO_NAME_RAW=$1
+
+    # Convert to Family and instance code 
+    SAVEIFS=$IFS
+    IFS="."
+    read -r -a array <<< "$SCENARIO_NAME_RAW"
+    IFS=$SAVEIFS
+
+    REQUIRED_SCENARIO_COMPONENTS=2
+    N_COMPONENTS=${#array[@]}
+
+    if (($REQUIRED_SCENARIO_COMPONENTS < $N_COMPONENTS)); then 
+        print_error "\"$1\" is not a properly formatted scenario"
+        return $FAIL
+    fi 
+
+    INPUT_FAMILY=${array[0]}
+
+    print_message "input scenario family: \"${INPUT_FAMILY}\""
+
+    if is_number $INPUT_FAMILY ; then 
+        print_message "family input is a number ... resolving to name"
+
+        if (($INPUT_FAMILY >= ${#SCENARIO_FAMILIES[@]})); then 
+            print_error "scenario family index $INPUT_FAMILY too big"
+            print_message "list available scenarios with ${COLOR_PURPLE}EMAS list${COLOR_NONE}"
+            return $FAIL
+        fi 
+
+        TARGET_SCENARIO_FAMILY_INDEX=$INPUT_FAMILY
+        TARGET_SCENARIO_FAMILY=${SCENARIO_FAMILIES[$INPUT_FAMILY]}
+    else 
+        
+
+        for i in ${!SCENARIO_FAMILIES[@]}; do 
+            if [[ "${SCENARIO_FAMILIES[$i]}" == "${INPUT_FAMILY}" ]]; then 
+                TARGET_SCENARIO_FAMILY_INDEX=$i
+            fi 
+        done 
+
+        if [[ "${TARGET_SCENARIO_FAMILY_INDEX}" == "" ]]; then 
+            print_error "\"$INPUT_FAMILY\" is not an existing scenario family"
+            print_message "list available scenarios with ${COLOR_PURPLE}EMAS list${COLOR_NONE}"
+            return $FAIL
+        fi 
+
+        TARGET_SCENARIO_FAMILY=$INPUT_FAMILY
+
+    fi 
+
+    if (($N_COMPONENTS == 1)); then 
+        print_warning "No scenario instance provided. Default to instance 0"
+        TARGET_SCENARIO_INSTANCE=0
+    else 
+        INPUT_INSTANCE=${array[1]}
+        print_message "input scenario instance: \"${INPUT_INSTANCE}\""
+        if ! is_number $INPUT_INSTANCE; then 
+            print_error "instance name must be an integer"
+            return $FAIL 
+        fi
+
+        TARGET_SCENARIO_INSTANCE=$INPUT_INSTANCE
+    fi 
+
+    if [ ! -f "${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}" ]; then 
+        print_error "no instance ${TARGET_SCENARIO_INSTANCE} of scenario family ${TARGET_SCENARIO_FAMILY}"
+        print_message "list available scenarios with ${COLOR_PURPLE}EMAS list${COLOR_NONE}"
+        return $FAIL
+    fi 
+
+    if [ ! -f "${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build" ]; then 
+        print_error "internal error: could not find ${TARGET_SCENARIO_FAMILY} build script"
+        return $FAIL
+    fi 
+
+    TARGET_SCENARIO_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
+    TARGET_SCENARIO_BUILD="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
+    TARGET_SCENARIO_WORK_DIR="${WORK_DIRECTORY}"
+
+    print_ok "Targeted scenario: $TARGET_SCENARIO_FAMILY.$TARGET_SCENARIO_INSTANCE [$TARGET_SCENARIO_FAMILY_INDEX.$TARGET_SCENARIO_INSTANCE]"
+
+}
+
+# Function to check if a scenario has been targeted at all 
+function scenario_targeted() { 
+    if [[ "${TARGET_SCENARIO_FAMILY}" == "" ]]; then 
+        return $FAIL
+    else 
+        return $SUCCESS
     fi
 }
 
-function get_scenario() {
-    
-}
 
 # Create new scenario family 
 # Create new secnario in family 

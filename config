@@ -7,6 +7,9 @@ export BASE_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 
 # The absolute directory of the Simulator 
 export SIMULATOR_DIRECTORY="${BASE_DIRECTORY}/Simulator"
 
+# The absolute directory of the Simulator config files 
+export SIMULATOR_CONFIG_DIRECTORY="${SIMULATOR_DIRECTORY}/Config"
+
 # The absolute directory of the Gem5
 export GEM5_DIRECTORY="${SIMULATOR_DIRECTORY}/GEM5/gem5"
 

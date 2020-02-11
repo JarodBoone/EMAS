@@ -9,7 +9,8 @@ set -u
 # Stop script execution after we receive an error 
 set -e 
 
-# NEED TO GET VERBOSE FLAGS HERE 
+# Change directories to the location of this script 
+pushd "$(dirname "$0")" > /dev/null 
 
 # Get the configuration variables (directory locations) and state varibles
 # (reflections of EMAS state)
@@ -83,5 +84,8 @@ shift 1
 
 # Execute the command 
 EMAS_$EMAS_CMD $@
+
+# Return to the previous working directory 
+popd > /dev/null 
 
 exit_EMAS

@@ -13,9 +13,40 @@ trap sigint_handler INT; function sigint_handler() {
 #############################################################################################
 
 # Make sure that there is a work directory 
+# 1 --> Active check? 
 function check_work_directory() {
 
-     if [ $# -ne 1 ]; then 
+    if [ $# -ne 1 ]; then 
+        print_error "Internal Error: incorrect number of arguments to check_work_directory"
+        exit_EMAS
+    fi
+
+    __ACTIVE=$1
+
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${WORK_DIRECTORY}" ]; then 
+        print_warning "No work directory found."
+        if [ $__ACTIVE -eq "1" ]; then 
+            
+            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${WORK_DIRECTORY}"
+                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+            else 
+                return 1
+            fi        
+        else 
+            return 1
+        fi 
+    else 
+        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
+    fi
+
+}
+
+# Check that the target scenario has a set up work directory 
+function check_ts_work_directory() { 
+
+    if [ $# -ne 3 ]; then 
         print_error "Internal Error: incorrect number of arguments to check_work_directory"
         exit_EMAS
     fi
@@ -63,9 +94,63 @@ function check_scenario_directory() {
         print_warning "No scenario directory found."
         if [ $__ACTIVE -eq "1" ]; then 
             
-            if ask "Would you like to create a scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${SCENARIO_DIRECTORY}"
+            if ask "Would you like to create a scenario directory at ${COLOR_GRAY}${SCE__ACTIVE=$1
+
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${WORK_DIRECTORY}" ]; then 
+        print_warning "No work directory found."
+        if [ $__ACTIVE -eq "1" ]; then 
+            
+            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${WORK_DIRECTORY}"
                 print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+            else 
+                return 1
+            fi        
+        else 
+            return 1
+        fi 
+    else 
+        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
+    fiNARIO_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${SCENARIO_DIRECTORY}"__ACTIVE=$1
+
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${WORK_DIRECTORY}" ]; then 
+        print_warning "No work directory found."
+        if [ $__ACTIVE -eq "1" ]; then 
+            
+            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${WORK_DIRECTORY}"
+                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+            else 
+                return 1
+            fi        
+        else 
+            return 1
+        fi 
+    else 
+        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
+    fi
+                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DI__ACTIVE=$1
+
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${WORK_DIRECTORY}" ]; then 
+        print_warning "No work directory found."
+        if [ $__ACTIVE -eq "1" ]; then 
+            
+            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${WORK_DIRECTORY}"
+                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+            else 
+                return 1
+            fi        
+        else 
+            return 1
+        fi 
+    else 
+        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
+    fiRECTORY}${COLOR_NONE}"
             else 
                 return 1
             fi

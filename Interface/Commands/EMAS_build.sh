@@ -14,19 +14,25 @@ function EMAS_build() {
         exit_EMAS
     fi
 
-    # we have at least one argument 
-    SCENARIO_NAME_RAW=$1
-    SAVEIFS=$IFS
+    # # we have at least one argument 
+    # SCENARIO_NAME_RAW=$1
+    # SAVEIFS=$IFS
 
-    # Parse argument into scenario family and id 
-    IFS="."
-    read -r -a array <<< "$SCENARIO_NAME_RAW"
-    IFS=$SAVEIFS
+    # # Parse argument into scenario family and id 
+    # IFS="."
+    # read -r -a array <<< "$SCENARIO_NAME_RAW"
+    # IFS=$SAVEIFS
 
-    REQUIRED_SCENARIO_COMPONENTS=2
-    if (($REQUIRED_SCENARIO_COMPONENTS != ${#array[@]})); then 
-        printf "nah"
-    fi 
+    # REQUIRED_SCENARIO_COMPONENTS=2
+    # if (($REQUIRED_SCENARIO_COMPONENTS != ${#array[@]})); then 
+    #     printf "nah"
+    # fi 
+
+    if ! target_scenario $1; then
+        exit_EMAS
+    fi
+
+    exit_EMAS
 
     export INPUT_FAMILY=${SCENARIO_FAMILIES[${array[0]}]}
     export INPUT_INSTANCE=${array[1]} 

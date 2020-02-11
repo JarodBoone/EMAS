@@ -100,3 +100,20 @@ function exit_EMAS() {
     printf "${COLOR_NONE}"
     exit
 }
+
+####################################################################################################
+############################# UTIL #################################################################
+####################################################################################################
+export SUCCESS=0
+export FAIL=1
+
+# Check if a given input is a number 
+# 1 --> variable to check if it is a number
+function is_number() {
+    re='^[0-9]+$'
+    if ! [[ $1 =~ $re ]]; then 
+        return $FAIL
+    else
+        return $SUCCESS
+    fi
+}
