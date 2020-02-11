@@ -19,6 +19,7 @@ source "./config"
 # check for output control flags 
 export __DEBUG=0
 export __VERBOSE=0
+
 __COUNT=1
 for var in "$@"; do
     if [ "$var" == "--debug" ] || [ "$var" == "-dbg" ]; then 
@@ -57,8 +58,8 @@ done
 # Hello! 
 print_welcome
 
-# Consistency and configuration checks 
-check_config # Check that we are configured 
+# Check that we are configured at all and load state variables 
+check_config
 
 # If there are no arguments given to EMAS then fail
 if [ $# -eq 0 ]; then

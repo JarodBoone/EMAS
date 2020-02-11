@@ -23,14 +23,32 @@ When Building a scenario
 
 I probably need to limit the number of things that are built at a time 
 
-Need to nail down the scenario naming convention. `family.number`. All families have the same build? Maybe idk 
+Need to nail down the scenario naming convention: `family.number`. All families have the same build? Maybe idk 
 
 ## Documentation 
 
 General overview - see docs 
 Usage - see docs 
 
-### Runtime 
+**bd** = base directory
+
+## Runtime 
+
+The basic EMAS runtime is conducted through the interface bash scripts (found in /Interface). The user executes EMAS commands in the form of bash scripts (found in /Interface/Commands)
+
+### Configuration Paradigm 
+
+The EMAS runtime relies on a proper configuration. This more or less means that the directory containing EMAS.sh has the expected directory structure.
+
+- **bd**/config: Contains definitions of absolute pointers to important EMAS directories and such. 
+
+The state of EMAS is represented by **bd**/state which more or less keeps track. If EMAS is validly configured then it is keeping consistent track of the state. 
+
+The first time you start up you will not be configured
+
+
+
+### General Case Sequence of Actions 
 
 - First thing we do is include all of the shell variables. Configuration and state 
 - Passive Config check 
@@ -39,6 +57,10 @@ Usage - see docs
     - Checking Installs 
     - Checking Directory Structure 
     - Establishing State file and locking state. (Flag configuration) 
+
+### API 
+
+Run these commands with `EMAS (command)` 
 
 
 ## Models 

@@ -81,7 +81,8 @@ function lock_state() {
 function update_state() { 
     if grep -q "export $1=" $STATE_FILE; then
         print_message "... Updating state variable $1 to $2"
-        sed -i "s/export $1=.*/export $1=$2/g" $STATE_FILE
+        val=$(echo "$2" | sed 's/\//\\\//g') # Escape back slashes if there are any
+        sed -i "s/export ${1}=.*/export ${1}=${val}/g" "${STATE_FILE}"
         export $1=$2
         lock_state 
     else 
@@ -104,8 +105,17 @@ function exit_EMAS() {
 ####################################################################################################
 ############################# UTIL #################################################################
 ####################################################################################################
+# Return codes 
 export SUCCESS=0
 export FAIL=1
+
+# Check function flags 
+export TRUE=true
+export FALSE=false
+
+# Check function flags 
+export ACTIVE=true
+export PASSIVE=false
 
 # Check if a given input is a number 
 # 1 --> variable to check if it is a number

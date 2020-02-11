@@ -3,7 +3,7 @@
 function EMAS_build() {
     print_status "Executing Build Command"
     # Lets build 
-    print_message "... Building Gem5"
+    print_message "... Preparing to compile Gem5"
 
     # Read the scenario 
     REQUIRED_ARGNUM=1
@@ -14,74 +14,34 @@ function EMAS_build() {
         exit_EMAS
     fi
 
-    # # we have at least one argument 
-    # SCENARIO_NAME_RAW=$1
-    # SAVEIFS=$IFS
-
-    # # Parse argument into scenario family and id 
-    # IFS="."
-    # read -r -a array <<< "$SCENARIO_NAME_RAW"
-    # IFS=$SAVEIFS
-
-    # REQUIRED_SCENARIO_COMPONENTS=2
-    # if (($REQUIRED_SCENARIO_COMPONENTS != ${#array[@]})); then 
-    #     printf "nah"
-    # fi 
+    print_message "... Targeting scenario"
 
     if ! target_scenario $1; then
         exit_EMAS
     fi
+    
+    source $TARGET_SCENARIO_BUILD
+
+    check_variable $GEM5_SIM_PLATFORM "GEM5_SIM_PLATFORM"
+    check_variable $GEM5_SIM_MODE "GEM5_SIM_MODE"
+
+    if ! check_target_scenario_work_directory $ACTIVE; then 
+        print_error "Cannot build without a work directory"
+        exit_EMAS
+    fi 
+
+    print_status "Compiling gem5 binary for scenario ${TARGET_SCENARIO_FAMILY}.${TARGET_SCENARIO_INSTANCE}"
+    
+    pushd "${GEM5_DIRECTORY}" > /dev/null
+    scons "${WORK_DIRECTORY}/build/${GEM5_SIM_PLATFORM}/gem5.${GEM5_SIM_MODE}" --colors -j9
+    popd > /dev/null 
+
+    printf "\n"
+    print_success "Compiled simulator for scenario ${TARGET_SCENARIO_FAMILY}.${TARGET_SCENARIO_INSTANCE} ${COLOR_GRAY}(${WORK_DIRECTORY}/build/${GEM5_SIM_PLATFORM}/gem5.${GEM5_SIM_MODE})${COLOR_NONE}"
+    
+    update_state __BUILD_DONE $TRUE
+    update_state __BUILT_SCENARIO_FAMILY "${TARGET_SCENARIO_FAMILY}"
+    update_state __COMPILED_GEM5_BINARY "${WORK_DIRECTORY}/build/${GEM5_SIM_PLATFORM}/gem5.${GEM5_SIM_MODE}"
 
     exit_EMAS
-
-    export INPUT_FAMILY=${SCENARIO_FAMILIES[${array[0]}]}
-    export INPUT_INSTANCE=${array[1]} 
-
-    print_message "... Looking for scenario [${INPUT_FAMILY}:${INPUT_INSTANCE}]"
-
-    # Check if the scenario exists 
-
-    pushd $SCENARIO_DIRECTORY/$INPUT_FAMILY > /dev/null
-
-    source "build"
-
-    __INSTANCE_COUNT=0
-    SCENARIOS_IN_FAMILY=($(ls | sed 's:/$::'))
-
-    for scenario in "${SCENARIOS_IN_FAMILY[@]}"; do 
-        if [ "${scenario}" != "build" ]; then 
-            if [ "${scenario}" == "${INPUT_INSTANCE}" ] || [ "${__INSTANCE_COUNT}" == "${INPUT_INSTANCE}" ]; then 
-                # Found the instance to build 
-                print_ok "Found instance ${scenario}"
-
-                print_message "... Loading instance ${scenario} specific build options"
-
-                source "${scenario}"
-
-                pushd $GEM5_DIRECTORY > /dev/null
-
-                check_variable $GEM5_SIM_PLATFORM "GEM5_SIM_PLATFORM"
-                check_variable $GEM5_SIM_MODE "GEM5_SdIM_MODE"
-
-                printf "\n"
-                print_status "Running Gem5 build script"
-
-                # Make sure the proper bariables are defined 
-                scons "${WORK_DIRECTORY}/build/${GEM5_SIM_PLATFORM}/gem5.${GEM5_SIM_MODE}" --colors -j9
-
-                printf "\n"
-
-                update_state __CURRENT_SCENARIO "${INPUT_FAMILY}.${INPUT_INSTANCE}"
-
-                popd > /dev/null 
-
-                exit_EMAS
-            fi
-
-            __INSTANCE_COUNT=$((__INSTANCE_COUNT + 1))
-        fi 
-
-    done 
-
-    popd > /dev/null    
 }

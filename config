@@ -27,4 +27,4 @@ export SCENARIO_DIRECTORY="${BASE_DIRECTORY}/Scenarios"
 # ===================================================
 export STATE_FILE="${BASE_DIRECTORY}/state"
 export STATE_FILE_LOCK="${STATE_FILE}.lock"
-source $STATE_FILE
+export STATE_FILE_DEFAULT="${STATE_FILE}.default"

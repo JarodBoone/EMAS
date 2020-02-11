@@ -26,51 +26,46 @@ function check_work_directory() {
     # Check to see if the work directory exists, if it does not make one 
     if [ ! -d "${WORK_DIRECTORY}" ]; then 
         print_warning "No work directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
+        if [ $1 = $ACTIVE ]; then 
             
             if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
                 mkdir -p "${WORK_DIRECTORY}"
                 print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
             else 
-                return 1
+                return $FAIL
             fi        
         else 
-            return 1
+            return $FAIL
         fi 
     else 
         print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
     fi
+
+    return $SUCCESS
 
 }
 
-# Check that the target scenario has a set up work directory 
-function check_ts_work_directory() { 
-
-    if [ $# -ne 3 ]; then 
-        print_error "Internal Error: incorrect number of arguments to check_work_directory"
-        exit_EMAS
-    fi
-
-    __ACTIVE=$1
-
-    # Check to see if the work directory exists, if it does not make one 
-    if [ ! -d "${WORK_DIRECTORY}" ]; then 
-        print_warning "No work directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
-            
-            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${WORK_DIRECTORY}"
-                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+# Make sure that the target scenario has a work directory 
+# 1 --> Active check 
+function check_target_scenario_work_directory() { 
+    if [[ ! -d "${TARGET_SCENARIO_WORK_DIR}" ]]; then 
+        print_warning "No Scenario work directory found."
+        
+        if [ $1 = $ACTIVE ]; then 
+            if ask "Would you like to create one at ${TARGET_SCENARIO_WORK_DIR}?"; then
+                mkdir -p "${TARGET_SCENARIO_WORK_DIR}"
+                print_ok "Created scenario work directory at ${TARGET_SCENARIO_WORK_DIR}"
+                return $SUCCESS
             else 
-                return 1
-            fi        
-        else 
-            return 1
+                print_warning "You cannot run this scenario (${TARGET_SCENARIO_FAMILY}.${TARGET_SCENARIO_INSTANCE}) without a work directory"
+                return $FAIL
+            fi   
         fi 
-    else 
-        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
-    fi
 
+        return $FAIL
+    fi
+    
+    return $SUCCESS
 }
 
 #############################################################################################
@@ -86,77 +81,19 @@ function check_scenario_directory() {
         exit_EMAS
     fi
 
-    __ACTIVE=$1
-
     # Check to see if the scenario directory exists
     if [ ! -d "${SCENARIO_DIRECTORY}" ]; then 
         
         print_warning "No scenario directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
-            
-            if ask "Would you like to create a scenario directory at ${COLOR_GRAY}${SCE__ACTIVE=$1
-
-    # Check to see if the work directory exists, if it does not make one 
-    if [ ! -d "${WORK_DIRECTORY}" ]; then 
-        print_warning "No work directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
-            
-            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${WORK_DIRECTORY}"
+        if [ $1 = $ACTIVE ]; then 
+            if ask "Would you like to create a scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${SCENARIO_DIRECTORY}"
                 print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
-            else 
-                return 1
-            fi        
+            else
+                return $FAIL
+            fi      
         else 
-            return 1
-        fi 
-    else 
-        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
-    fiNARIO_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${SCENARIO_DIRECTORY}"__ACTIVE=$1
-
-    # Check to see if the work directory exists, if it does not make one 
-    if [ ! -d "${WORK_DIRECTORY}" ]; then 
-        print_warning "No work directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
-            
-            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${WORK_DIRECTORY}"
-                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
-            else 
-                return 1
-            fi        
-        else 
-            return 1
-        fi 
-    else 
-        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
-    fi
-                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DI__ACTIVE=$1
-
-    # Check to see if the work directory exists, if it does not make one 
-    if [ ! -d "${WORK_DIRECTORY}" ]; then 
-        print_warning "No work directory found."
-        if [ $__ACTIVE -eq "1" ]; then 
-            
-            if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
-                mkdir -p "${WORK_DIRECTORY}"
-                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
-            else 
-                return 1
-            fi        
-        else 
-            return 1
-        fi 
-    else 
-        print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
-    fiRECTORY}${COLOR_NONE}"
-            else 
-                return 1
-            fi
-                    
-        else 
-            return 1
+            return $FAIL
         fi 
     else 
         print_message "Found scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
@@ -169,23 +106,23 @@ function check_scenario_directory() {
         if [ ! -f "build" ]; then 
             print_warning "No build script for scenario family ${COLOR_PURPLE}${scenario_family}${COLOR_NONE}"
 
-            if [ $__ACTIVE -eq "1" ]; then 
+            if [ $1 = $ACTIVE ]; then 
                 if ask "Would you like to initialize ${scenario_family} with the default build script?"; then
                     print_message "... Adding default build script to $PWD"
                     cp "../build" . 
                     print_success "Added build script to scenario family ${COLOR_PURPLE}${scenario_family}${COLOR_NONE}"
                 else 
-                    return 1
+                    return $FAIL
                 fi 
             else 
-                return 1
+                return $FAIL
             fi 
         fi 
 
         popd > /dev/null
     done 
 
-    return 0
+    return $SUCCESS
 }
 
 #############################################################################################
@@ -205,7 +142,7 @@ function verify_config() {
     print_message "... Verifying that EMAS is properly configured"
 
     # Redundant check 
-    if [ $__EMAS_IS_CONFIGURED -eq 0 ]; then 
+    if [ $__EMAS_IS_CONFIGURED = $FALSE ]; then 
         print_error "EMAS not configured!"
         return 1
     fi 
@@ -232,8 +169,24 @@ function verify_config() {
 # Check Configuration state and prompt configuration if necessary 
 function check_config() { 
 
+    if [ ! -f "${STATE_FILE_DEFAULT}" ]; then 
+        print_error "No default state file found. Expeted ${STATE_FILE_DEFAULT} to exist!"
+        print_message "Consider re cloning or downloading the repository"
+        exit_EMAS
+        
+    fi 
+
+    if [ ! -f "${STATE_FILE}" ]; then 
+        print_warning "EMAS could not find a state file"
+        print_status "Creating default state file at ${STATE_FILE}"
+        cat "${STATE_FILE_DEFAULT}" > "${STATE_FILE}"
+        lock_state
+    fi 
+
+    source "${STATE_FILE}"
+
     # Check that EMAS is in the configured state. If not offer configuration 
-    if [ $__EMAS_IS_CONFIGURED -eq 0 ]; then 
+    if [ $__EMAS_IS_CONFIGURED = $FALSE ]; then 
         print_error "It appears that EMAS is not configured on this machine"
         askf "Would you like to configure EMAS?" EMAS_config "You have chosen to configure EMAS" exit_EMAS "You have chosen not to configure EMAS :("
     fi 

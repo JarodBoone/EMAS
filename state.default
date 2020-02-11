@@ -7,16 +7,13 @@
 # =========================================
 
 # has EMAS been configured? 
-export __EMAS_IS_CONFIGURED=1
-
-# do we have the right directory structure?
-export __EMAS_DIR_CHECK=0
+export __EMAS_IS_CONFIGURED=false
 
 # has any gem5 binary been built at all? 
-export __BUILD_DONE=0
+export __BUILD_DONE=false
 
-# how many gem5 binaries have been built 
-export __NUM_BUILT=0
+# the name of the built scenario family if any
+export __BUILT_SCENARIO_FAMILY=""
 
-# the name of the previous scenario run
-export __CURRENT_SCENARIO=Test.0
+# the name of the compiled binary if any 
+export __COMPILED_GEM5_BINARY=""

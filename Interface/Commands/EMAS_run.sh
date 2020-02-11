@@ -3,6 +3,12 @@ function EMAS_run() {
     # The run command is the main functionality of EMAS 
     # 1 -> Verify that the correct scenario is built 
     print_status "Executing ${COLOR_PURPLE}run${COLOR_NONE} Command"
+
+    if [[ " ${__BUILD_DONE} " == " 0 " ]]; then 
+        print_error "No scenario has been built. Build a scenario first with ${COLOR_PURPLE}EMAS.sh build ${COLOR_NONE}"
+        exit_EMAS
+    fi 
+
     # Lets build 
     print_message "... Running Gem5"
 
@@ -12,39 +18,27 @@ function EMAS_run() {
     if (($# < 1)) ; then 
         print_warning "Task ${COLOR_PURPLE}run${COLOR_NONE} not given scenario argument"
         print_status "Running previously targeted scenario ${__CURRENT_SCENARIO}"
-        __TARGET_SCENARIO=$__CURRENT_SCENARIO
+        if ! target_scenario $__CURRENT_SCENARIO; then
+            exit_EMAS
+        fi
     else 
-        __TARGET_SCENARIO=$1
-
+        if ! target_scenario $1; then
+            exit_EMAS
+        fi
     fi
 
-    # Parse the scenario
-    SAVEIFS=$IFS
-
-    # Parse argument into scenario family and id 
-    IFS="."
-    read -r -a array <<< "$__TARGET_SCENARIO"
-    IFS=$SAVEIFS
-
-    REQUIRED_SCENARIO_COMPONENTS=2
-    if (($REQUIRED_SCENARIO_COMPONENTS != ${#array[@]})); then 
-        printf "nah"
+    # Check that we have a work directory 
+    if ! check_target_scenario_work_directory $PASSIVE; then 
+        print_error "Cannot run scenario without a work directory"
+        exit_EMAS
     fi 
 
-    export INPUT_FAMILY=${SCENARIO_FAMILIES[${array[0]}]}
-    export INPUT_INSTANCE=${array[1]} 
+    # Make sure that the simulator is built for this family 
+    if [[ ! " ${__BUILT_SCENARIO_FAMILY} " = " ${TARGET_SCENARIO_FAMILY} " ]]; then 
+        print_error "Wrong binary built"
+    fi 
 
-    print_message "... Looking for scenario [${INPUT_FAMILY}:${INPUT_INSTANCE}]"
-
-    # Check if the scenario exists 
-
-    pushd $SCENARIO_DIRECTORY/$INPUT_FAMILY > /dev/null
-
-    source $INPUT_INSTANCE
-
-    popd > /dev/null
-
-    # Need to make scenario directory or check that the scenario is set up 
+    # run gem5 
 
 
     # Actually build gem5 

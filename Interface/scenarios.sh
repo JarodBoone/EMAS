@@ -37,14 +37,14 @@ function list_scenarios() {
 }
 
 # Variables for choosing and accessing scenarios 
-export TARGET_SCENARIO_FAMILY=""
-export TARGET_SCENARIO_FAMILY_INDEX=""
-export TARGET_SCENARIO_INSTANCE=""
+export TARGET_SCENARIO_FAMILY=""                # Plaintext family name
+export TARGET_SCENARIO_FAMILY_INDEX=""          # Integer family index
+export TARGET_SCENARIO_INSTANCE=""              # Integer instance index
 
-export TARGET_SCENARIO_SCRIPT=""
-export TARGET_SCENARIO_BUILD=""
+export TARGET_SCENARIO_SCRIPT=""                # Absolute path of the scenario instance script
+export TARGET_SCENARIO_BUILD=""                 # Absolute path of the family build script 
 
-export TARGET_SCENARIO_WORK_DIR=""
+export TARGET_SCENARIO_WORK_DIR=""              # Absolute path of the scenario work directory 
 
 # Function to parse a scenario name or index and set target variables
 # 1 --> string of format "family.instance" to parse
@@ -132,7 +132,8 @@ function target_scenario() {
 
     TARGET_SCENARIO_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
     TARGET_SCENARIO_BUILD="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
-    TARGET_SCENARIO_WORK_DIR="${WORK_DIRECTORY}"
+
+    TARGET_SCENARIO_WORK_DIR="${WORK_DIRECTORY}/Scenarios/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
 
     print_ok "Targeted scenario: $TARGET_SCENARIO_FAMILY.$TARGET_SCENARIO_INSTANCE [$TARGET_SCENARIO_FAMILY_INDEX.$TARGET_SCENARIO_INSTANCE]"
 
