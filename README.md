@@ -1,7 +1,7 @@
 # EMAS 
 Emerging Memory Architecture Simulator. 
 
-This is a general purpose GEM5 based simulator capable of modeling any combination of emerging memory techonologies. Current supported technologies are 
+This is a general purpose GEM5 based simulator capable of modeling any combination of emerging memory techonologies. Current supported technologies are: 
 
 - Near Data Processing 
 - Processing in Memory 
@@ -11,10 +11,17 @@ This is a general purpose GEM5 based simulator capable of modeling any combinati
 
 - Gem5 build requirements 
 - Bash interpreter 
+- The system is tested on Linux distrobutions
 
 ## Usage 
 
-First you need to build a scenario and it will create a build directory in the work folder then you can run that scenario. 
+EMAS builds and runs simulations through a **scenario** interface. The scripts that define scenarios are found in **/Scenarios**. 
+
+Each scenario belongs to a family. A scenario family encompasses a specific hardware configuration and disk image while the individual instances typically specify a workload or parameters for the hardware configuration. 
+
+Each scenario family must have a bash script called `build`. This is required to build a scenario
+
+First you need to build a scenario a scenario family and it will create a build directory in the work folder then you can run that scenario. 
 
 When Building a scenario 
 - Identify valid scenario string 

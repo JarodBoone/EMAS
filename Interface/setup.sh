@@ -47,14 +47,37 @@ function check_work_directory() {
 
 # Make sure that the target scenario has a work directory 
 # 1 --> Active check 
-function check_target_scenario_work_directory() { 
-    if [[ ! -d "${TARGET_SCENARIO_WORK_DIR}" ]]; then 
+function check_target_family_work_directory() { 
+    if [[ ! -d "${TARGET_FAMILY_WORK_DIR}" ]]; then 
         print_warning "No Scenario work directory found."
         
         if [ $1 = $ACTIVE ]; then 
-            if ask "Would you like to create one at ${TARGET_SCENARIO_WORK_DIR}?"; then
-                mkdir -p "${TARGET_SCENARIO_WORK_DIR}"
-                print_ok "Created scenario work directory at ${TARGET_SCENARIO_WORK_DIR}"
+            if ask "Would you like to create one at ${TARGET_FAMILY_WORK_DIR}?"; then
+                mkdir -p "${TARGET_FAMILY_WORK_DIR}"
+                print_ok "Created scenario work directory at ${TARGET_FAMILY_WORK_DIR}"
+                return $SUCCESS
+            else 
+                print_warning "You cannot run this scenario family (${TARGET_SCENARIO_FAMILY}) without a work directory"
+                return $FAIL
+            fi   
+        fi 
+
+        return $FAIL
+    fi
+    
+    return $SUCCESS
+}
+
+# Make sure that the target scenario has a work directory 
+# 1 --> Active check 
+function check_target_instance_work_directory() { 
+    if [[ ! -d "${TARGET_INSTANCE_WORK_DIR}" ]]; then 
+        print_warning "No Scenario work directory found."
+        
+        if [ $1 = $ACTIVE ]; then 
+            if ask "Would you like to create one at ${TARGET_INSTANCE_WORK_DIR}?"; then
+                mkdir -p "${TARGET_INSTANCE_WORK_DIR}"
+                print_ok "Created scenario work directory at ${TARGET_INSTANCE_WORK_DIR}"
                 return $SUCCESS
             else 
                 print_warning "You cannot run this scenario (${TARGET_SCENARIO_FAMILY}.${TARGET_SCENARIO_INSTANCE}) without a work directory"
@@ -67,6 +90,7 @@ function check_target_scenario_work_directory() {
     
     return $SUCCESS
 }
+
 
 #############################################################################################
 #################################### SCENARIO DIR ###########################################
@@ -109,7 +133,7 @@ function check_scenario_directory() {
             if [ $1 = $ACTIVE ]; then 
                 if ask "Would you like to initialize ${scenario_family} with the default build script?"; then
                     print_message "... Adding default build script to $PWD"
-                    cp "../build" . 
+                    cp "../build.default" . 
                     print_success "Added build script to scenario family ${COLOR_PURPLE}${scenario_family}${COLOR_NONE}"
                 else 
                     return $FAIL

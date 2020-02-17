@@ -25,7 +25,7 @@ function list_scenarios() {
         __INSTANCE_COUNT=0
         for scenario in "${SCENARIOS_IN_FAMILY[@]}"; do 
             if [ "${scenario}" != "build" ]; then 
-                printf "\t[Instance ${COLOR_YELLOW}${scenario}${COLOR_NONE}] ($__FAMILY_COUNT.$__INSTANCE_COUNT | $scenario_family.$__INSTANCE_COUNT) : \n"
+                printf "\t[Instance ${COLOR_YELLOW}${scenario}${COLOR_NONE}] ($__FAMILY_COUNT.$__INSTANCE_COUNT | $scenario_family.$__INSTANCE_COUNT): \n"
                 __INSTANCE_COUNT=$((__INSTANCE_COUNT + 1))
             fi 
             
@@ -41,14 +41,15 @@ export TARGET_SCENARIO_FAMILY=""                # Plaintext family name
 export TARGET_SCENARIO_FAMILY_INDEX=""          # Integer family index
 export TARGET_SCENARIO_INSTANCE=""              # Integer instance index
 
-export TARGET_SCENARIO_SCRIPT=""                # Absolute path of the scenario instance script
-export TARGET_SCENARIO_BUILD=""                 # Absolute path of the family build script 
+export TARGET_FAMILY_BUILD=""                   # Absolute path of the family build script 
+export TARGET_INSTANCE_SCRIPT=""                # Absolute path of the scenario instance script
 
-export TARGET_SCENARIO_WORK_DIR=""              # Absolute path of the scenario work directory 
+export TARGET_FAMILY_WORK_DIR=""                # Absolute path of the scenario family work directory 
+export TARGET_INSTANCE_WORK_DIR=""              # Absolute path of the scenario instance work directory 
 
-# Function to parse a scenario name or index and set target variables
+# Function to parse a scenario family name or index and set target variables
 # 1 --> string of format "family.instance" to parse
-function target_scenario() { 
+function target_scenario_family() { 
     if [ $# -ne 1 ] ; then 
         print_error "Internal Error: incorrect number of arguments to target_scenario"
         exit_EMAS
@@ -69,7 +70,7 @@ function target_scenario() {
     if (($REQUIRED_SCENARIO_COMPONENTS < $N_COMPONENTS)); then 
         print_error "\"$1\" is not a properly formatted scenario"
         return $FAIL
-    fi 
+    fi  
 
     INPUT_FAMILY=${array[0]}
 
@@ -103,7 +104,40 @@ function target_scenario() {
 
         TARGET_SCENARIO_FAMILY=$INPUT_FAMILY
 
-    fi 
+    fi
+
+    TARGET_SCENARIO_BUILD="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
+    TARGET_FAMILY_WORK_DIR="${WORK_DIRECTORY}/Scenarios/${TARGET_SCENARIO_FAMILY}"
+}
+
+# Function to parse a scenario name or index and set target variables
+# 1 --> string of format "family.instance" to parse
+function target_scenario_instance() { 
+    if [ $# -ne 1 ] ; then 
+        print_error "Internal Error: incorrect number of arguments to target_scenario"
+        exit_EMAS
+    fi
+
+    if ! target_scenario_family $1; then
+        return $FAIL
+    fi
+
+    # 1st argument is the scenario name to parse
+    SCENARIO_NAME_RAW=$1
+
+    # Convert to Family and instance code 
+    SAVEIFS=$IFS
+    IFS="."
+    read -r -a array <<< "$SCENARIO_NAME_RAW"
+    IFS=$SAVEIFS
+
+    REQUIRED_SCENARIO_COMPONENTS=2
+    N_COMPONENTS=${#array[@]}
+
+    if (($REQUIRED_SCENARIO_COMPONENTS < $N_COMPONENTS)); then 
+        print_error "\"$1\" is not a properly formatted scenario"
+        return $FAIL
+    fi  
 
     if (($N_COMPONENTS == 1)); then 
         print_warning "No scenario instance provided. Default to instance 0"
@@ -131,9 +165,7 @@ function target_scenario() {
     fi 
 
     TARGET_SCENARIO_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
-    TARGET_SCENARIO_BUILD="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
-
-    TARGET_SCENARIO_WORK_DIR="${WORK_DIRECTORY}/Scenarios/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
+    TARGET_INSTANCE_WORK_DIR="${TARGET_FAMILY_WORK_DIR}/${TARGET_SCENARIO_INSTANCE}"
 
     print_ok "Targeted scenario: $TARGET_SCENARIO_FAMILY.$TARGET_SCENARIO_INSTANCE [$TARGET_SCENARIO_FAMILY_INDEX.$TARGET_SCENARIO_INSTANCE]"
 

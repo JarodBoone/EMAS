@@ -17,26 +17,33 @@ function EMAS_run() {
 
     if (($# < 1)) ; then 
         print_warning "Task ${COLOR_PURPLE}run${COLOR_NONE} not given scenario argument"
-        print_status "Running previously targeted scenario ${__CURRENT_SCENARIO}"
-        if ! target_scenario $__CURRENT_SCENARIO; then
+        print_status "Running previously built scenario family ${__BUILT_SCENARIO_FAMILY}"
+        print_status "Defaulting to instance 0 of scenario family ${__BUILT_SCENARIO_FAMILY}"
+        __TARGET_ME="${__BUILT_SCENARIO_FAMILY}.0"
+        if ! target_scenario_instance $__TARGET_ME; then
             exit_EMAS
         fi
     else 
-        if ! target_scenario $1; then
+        if ! target_scenario_instance $1; then
             exit_EMAS
         fi
     fi
 
     # Check that we have a work directory 
-    if ! check_target_scenario_work_directory $PASSIVE; then 
+    if ! check_target_instance_work_directory $ACTIVE; then 
         print_error "Cannot run scenario without a work directory"
         exit_EMAS
     fi 
 
     # Make sure that the simulator is built for this family 
     if [[ ! " ${__BUILT_SCENARIO_FAMILY} " = " ${TARGET_SCENARIO_FAMILY} " ]]; then 
-        print_error "Wrong binary built"
+        print_error "Current GEM5 binary was built for scenario family \"${__BUILT_SCENARIO_FAMILY}\", not \"${TARGET_SCENARIO_FAMILY}\""
+        print_message "Use ${COLOR_PURPLE}EMAS.sh build ${TARGET_SCENARIO_FAMILY} ${COLOR_NONE}to compile this scenario family"
     fi 
+
+    # Load scenario instance variables 
+    
+    # Create run script 
 
     # run gem5 
 
