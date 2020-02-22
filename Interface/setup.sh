@@ -30,7 +30,7 @@ function check_work_directory() {
             
             if ask "Would you like to create a work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}?"; then
                 mkdir -p "${WORK_DIRECTORY}"
-                print_success "Created scenario directory at ${COLOR_GRAY}${SCENARIO_DIRECTORY}${COLOR_NONE}"
+                print_success "Created work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
             else 
                 return $FAIL
             fi        
@@ -41,6 +41,42 @@ function check_work_directory() {
         print_message "Found work directory at ${COLOR_GRAY}${WORK_DIRECTORY}${COLOR_NONE}"
     fi
 
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${DISK_IMG_DIRECTORY}" ]; then 
+        print_warning "No disk image work directory found."
+        if [ $1 = $ACTIVE ]; then 
+            
+            if ask "Would you like to create a disk image work directory at ${COLOR_GRAY}${DISK_IMG_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${DISK_IMG_DIRECTORY}"
+                print_success "Created work directory at ${COLOR_GRAY}${DISK_IMG_DIRECTORY}${COLOR_NONE}"
+            else 
+                return $FAIL
+            fi        
+        else 
+            return $FAIL
+        fi 
+    else 
+        print_message "Found disk-image work directory at ${COLOR_GRAY}${DISK_IMG_DIRECTORY}${COLOR_NONE}"
+    fi
+
+    # Check to see if the work directory exists, if it does not make one 
+    if [ ! -d "${SCENARIO_OUTPUT_DIRECTORY}" ]; then 
+        print_warning "No scenario work directory found."
+        if [ $1 = $ACTIVE ]; then 
+            
+            if ask "Would you like to create a scenario work directory at ${COLOR_GRAY}${SCENARIO_OUTPUT_DIRECTORY}${COLOR_NONE}?"; then
+                mkdir -p "${SCENARIO_OUTPUT_DIRECTORY}"
+                print_success "Created work directory at ${COLOR_GRAY}${SCENARIO_OUTPUT_DIRECTORY}${COLOR_NONE}"
+            else 
+                return $FAIL
+            fi        
+        else 
+            return $FAIL
+        fi 
+    else 
+        print_message "Found scenario work directory at ${COLOR_GRAY}${SCENARIO_OUTPUT_DIRECTORY}${COLOR_NONE}"
+    fi
+
     return $SUCCESS
 
 }
@@ -48,6 +84,11 @@ function check_work_directory() {
 # Make sure that the target scenario has a work directory 
 # 1 --> Active check 
 function check_target_family_work_directory() { 
+    if ! scenario_targeted; then 
+        print_error "No scenario targeted"
+        return $FAIL
+    fi 
+
     if [[ ! -d "${TARGET_FAMILY_WORK_DIR}" ]]; then 
         print_warning "No Scenario work directory found."
         
@@ -71,6 +112,11 @@ function check_target_family_work_directory() {
 # Make sure that the target scenario has a work directory 
 # 1 --> Active check 
 function check_target_instance_work_directory() { 
+    if ! scenario_targeted; then 
+        print_error "No scenario targeted"
+        return $FAIL
+    fi 
+
     if [[ ! -d "${TARGET_INSTANCE_WORK_DIR}" ]]; then 
         print_warning "No Scenario work directory found."
         
@@ -91,6 +137,33 @@ function check_target_instance_work_directory() {
     return $SUCCESS
 }
 
+#############################################################################################
+#################################### DISK_IMAGE #############################################
+#############################################################################################
+
+# Make sure that the disk image specified by the targeted scenario
+function check_target_disk_image() { 
+    if ! check_variable $GEM5_DISK_IMG "GEM5_DISK_IMG"; then 
+        print_error "No disk image specified"
+        return $FAIL
+    fi 
+
+    if ! [ -e $GEM5_DISK_IMG ]; then
+        print_warning "Specified disk image \"${GEM5_DISK_IMG}\" does not exist"
+
+        if [ $1 = $ACTIVE ]; then 
+            if ask "Would you like to create one at ${GEM5_DISK_IMG}?"; then
+                python $GEM5_DISK_UTIL init ${GEM5_DISK_IMG} ${GEM5_DISK_IMG_SIZE}
+                print_ok "Created empty disk image at ${GEM5_DISK_IMG}"
+
+            else 
+                print_warning "Specified disk image \"${GEM5_DISK_IMG}\" not present"
+                return $FAIL
+            fi   
+        fi 
+
+    fi 
+}
 
 #############################################################################################
 #################################### SCENARIO DIR ###########################################
@@ -239,6 +312,6 @@ function check_variable() {
         print_error "Build Error: ${__VAR_NAME} is not set"
         exit_EMAS
     else 
-        print_ok "${__VAR_NAME} set to ${GEM5_SIM_PLATFORM}"
+        print_ok "${__VAR_NAME} set to ${__VAR_VALUE}"
     fi
 }

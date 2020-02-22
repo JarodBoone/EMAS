@@ -40,8 +40,8 @@ done
 # Get common utilities 
 source "${INTERFACE_DIRECTORY}/print.sh" # printing utilites 
 source "${INTERFACE_DIRECTORY}/common.sh" # common interface utilities 
-source "${INTERFACE_DIRECTORY}/setup.sh" # simulation setup utilities 
 source "${INTERFACE_DIRECTORY}/scenarios.sh" # scenario setup utilities 
+source "${INTERFACE_DIRECTORY}/setup.sh" # simulation setup utilities 
 
 #TODO: Make an EMAS_commands array and use that to source all the command scripts and 
 # check if a command is valid 

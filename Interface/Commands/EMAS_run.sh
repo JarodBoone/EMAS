@@ -42,6 +42,17 @@ function EMAS_run() {
     fi 
 
     # Load scenario instance variables 
+    source "${TARGET_INSTANCE_SCRIPT}"
+
+    # Disk image 
+    check_variable $FS_SIMULATION "FS_SIMULATION"
+    if [[ $FS_SIMULATION ]]; then 
+        check_variable $GEM5_DISK_IMG "GEM5_DISK_IMG"
+    fi 
+
+    if ! check_target_disk_image $ACTIVE; then 
+        print_error "Cannot run scenario without a properly formatted disk image"
+    fi
     
     # Create run script 
 

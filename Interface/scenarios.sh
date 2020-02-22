@@ -41,7 +41,7 @@ export TARGET_SCENARIO_FAMILY=""                # Plaintext family name
 export TARGET_SCENARIO_FAMILY_INDEX=""          # Integer family index
 export TARGET_SCENARIO_INSTANCE=""              # Integer instance index
 
-export TARGET_FAMILY_BUILD=""                   # Absolute path of the family build script 
+export TARGET_FAMILY_BUILD_SCRIPT=""            # Absolute path of the family build script 
 export TARGET_INSTANCE_SCRIPT=""                # Absolute path of the scenario instance script
 
 export TARGET_FAMILY_WORK_DIR=""                # Absolute path of the scenario family work directory 
@@ -106,8 +106,8 @@ function target_scenario_family() {
 
     fi
 
-    TARGET_SCENARIO_BUILD="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
-    TARGET_FAMILY_WORK_DIR="${WORK_DIRECTORY}/Scenarios/${TARGET_SCENARIO_FAMILY}"
+    TARGET_FAMILY_BUILD_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/build"
+    TARGET_FAMILY_WORK_DIR="${SCENARIO_OUTPUT_DIRECTORY}/${TARGET_SCENARIO_FAMILY}"
 }
 
 # Function to parse a scenario name or index and set target variables
@@ -164,7 +164,7 @@ function target_scenario_instance() {
         return $FAIL
     fi 
 
-    TARGET_SCENARIO_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
+    TARGET_INSTANCE_SCRIPT="${SCENARIO_DIRECTORY}/${TARGET_SCENARIO_FAMILY}/${TARGET_SCENARIO_INSTANCE}"
     TARGET_INSTANCE_WORK_DIR="${TARGET_FAMILY_WORK_DIR}/${TARGET_SCENARIO_INSTANCE}"
 
     print_ok "Targeted scenario: $TARGET_SCENARIO_FAMILY.$TARGET_SCENARIO_INSTANCE [$TARGET_SCENARIO_FAMILY_INDEX.$TARGET_SCENARIO_INSTANCE]"

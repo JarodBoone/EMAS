@@ -1,4 +1,12 @@
 #!/bin/bash 
+# Scenario script 
 print_status "Running the scenario!"
+
+# Type of simulation
+export FS_SIMULATION=$TRUE
+
+# Request disk image 
+export GEM5_DISK_IMG="${DISK_IMG_DIRECTORY}/aarch64_1000.img"   # Disk image filename 
+export GEM5_DISK_IMG_SIZE=512                                   # Size of the disk image in megabytes 
 
 export GEM5_CONFIG_SCRIPT="${SIMULATOR_CONFIG_DIRECTORY}/fs.py"
