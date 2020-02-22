@@ -46,7 +46,7 @@ function check_work_directory() {
         print_warning "No disk image work directory found."
         if [ $1 = $ACTIVE ]; then 
             
-            if ask "Would you like to create a disk image work directory at ${COLOR_GRAY}${DISK_IMG_DIRECTORY}${COLOR_NONE}?"; then
+            if ask "Would you like to create a disk image work directory at ${DISK_IMG_DIRECTORY}?"; then
                 mkdir -p "${DISK_IMG_DIRECTORY}"
                 print_success "Created work directory at ${COLOR_GRAY}${DISK_IMG_DIRECTORY}${COLOR_NONE}"
             else 
