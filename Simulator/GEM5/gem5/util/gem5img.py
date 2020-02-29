@@ -284,10 +284,7 @@ partitionCom = Command('partition', 'Partition part of "init".',
 def partition(dev, cylinders, heads, sectors):
     # Use fdisk to partition the device
     comStr = '0,\n;\n;\n;\n'
-    return runPriv([findProg('sfdisk'), '--no-reread', '-D', \
-                   '-C', "%d" % cylinders, \
-                   '-H', "%d" % heads, \
-                   '-S', "%d" % sectors, \
+    return runPriv([findProg('sfdisk'), '-u', 'S', '-L', '--no-reread', \
                    str(dev)], inputVal=comStr)
 
 def partitionComFunc(options, args):

@@ -141,6 +141,71 @@ function check_target_instance_work_directory() {
 #################################### DISK_IMAGE #############################################
 #############################################################################################
 
+# Create an empty disk image with the 
+# 1 --> The absolute path of the disk image to be created 
+# 2 --> The size of the disk image 
+function create_disk_image() { 
+    if [ $# -ne 2 ]; then 
+        print_error "Internal Error: incorrect number of arguments to create_disk_image"
+        exit_EMAS
+    fi
+
+    if [ -e $1 ]; then
+        print_warning "Specified disk image \"${1}\" already exists"
+
+        if ask "Are you sure you would like to delete ${1} and recreate it?"; then
+            print_status "Deleting ${1}"
+            rm -rf $1
+        else 
+            return $FAIL
+        fi   
+    fi 
+
+    # Create an empty disk image
+    dd if=/dev/zero of=$1 count=$2 
+
+    # __LOOP_DEV=$(sudo losetup -f)
+    # sudo losetup $__LOOP_DEV $1
+    echo ';' | sudo sfdisk --no-reread $1
+    # fsync 
+    # sfdisk -l 
+
+    # sudo losetup -d $__LOOP_DEV 
+
+}
+
+# Format a disk image with a filesystem 
+# 1 --> The name of the disk image to format
+function format_disk_image() { 
+    if [ $# -ne 1 ]; then 
+        print_error "Internal Error: incorrect number of arguments to format_disk_image"
+        exit_EMAS
+    fi
+
+    
+
+    # Mount the directory 
+    __LOOP_DEV=$(sudo losetup -f)
+    print_message "loop device ${__LOOP_DEV} targeted"
+
+    mkdir $GEM5_TEMP_MNT_DIRECTORY
+
+    $GEM5_DISK_UTIL mount $1 $GEM5_TEMP_MNT_DIRECTORY
+
+    pushd $GEM5_TEMP_MNT_DIRECTORY > /dev/null
+
+    ls 
+
+    mkdir "fuck"
+
+    popd > /dev/null
+
+    $GEM5_DISK_UTIL unmount $GEM5_TEMP_MNT_DIRECTORY
+
+    # rm -rf $GEM5_TEMP_MNT_DIRECTORY
+
+}
+
 # Make sure that the disk image specified by the targeted scenario
 function check_target_disk_image() { 
     if ! check_variable $GEM5_DISK_IMG "GEM5_DISK_IMG"; then 
@@ -153,8 +218,13 @@ function check_target_disk_image() {
 
         if [ $1 = $ACTIVE ]; then 
             if ask "Would you like to create one at ${GEM5_DISK_IMG}?"; then
-                python $GEM5_DISK_UTIL init ${GEM5_DISK_IMG} ${GEM5_DISK_IMG_SIZE}
-                print_ok "Created empty disk image at ${GEM5_DISK_IMG}"
+                # $GEM5_DISK_UTIL init ${GEM5_DISK_IMG} ${GEM5_DISK_IMG_SIZE}
+                # print_ok "Created empty disk image at ${GEM5_DISK_IMG}"
+                
+                # format_disk_image $GEM5_DISK_IMG
+                # print_ok "Formatted ${GEM5_DISK_IMG}"
+
+                create_disk_image $GEM5_DISK_IMG $GEM5_DISK_IMG_SIZE
 
             else 
                 print_warning "Specified disk image \"${GEM5_DISK_IMG}\" not present"
@@ -163,6 +233,10 @@ function check_target_disk_image() {
         fi 
 
     fi 
+
+    # DELETE ME 
+    # rm -rf $GEM5_DISK_IMG
+    # format_disk_image $GEM5_DISK_IMG
 }
 
 #############################################################################################

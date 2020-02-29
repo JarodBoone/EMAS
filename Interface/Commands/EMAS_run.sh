@@ -4,7 +4,7 @@ function EMAS_run() {
     # 1 -> Verify that the correct scenario is built 
     print_status "Executing ${COLOR_PURPLE}run${COLOR_NONE} Command"
 
-    if [[ " ${__BUILD_DONE} " == " 0 " ]]; then 
+    if [[ " ${__BUILD_DONE} " == " ${FALSE} " ]]; then 
         print_error "No scenario has been built. Build a scenario first with ${COLOR_PURPLE}EMAS.sh build ${COLOR_NONE}"
         exit_EMAS
     fi 

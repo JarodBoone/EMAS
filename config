@@ -42,6 +42,9 @@ export SCENARIO_OUTPUT_DIRECTORY="${WORK_DIRECTORY}/Scenarios"
 # The absolute directory of the Simulator output 
 export GEM5_BUILD_DIRECTORY="${WORK_DIRECTORY}/build"
 
+# The absolute directory of the Temporary mounting directory
+export GEM5_TEMP_MNT_DIRECTORY="${WORK_DIRECTORY}/mnt"
+
 # ===================================================
 # =================== State Files ===================
 # ===================================================

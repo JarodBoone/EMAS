@@ -85,6 +85,7 @@ Technology
 - Made a basic shell interface for EMAS 
 - Implemented `build` command which is a wrapper to build gem5 
     - Figure out where to put the scenario directory and how to manage them 
+- Ok Apparently I can't use the gem5img.py disk utility to create and manage disk images so I will have to do that myself uhhhh 
 
 ### TODO
 
