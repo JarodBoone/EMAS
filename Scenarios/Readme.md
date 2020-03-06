@@ -10,13 +10,19 @@ The scripts have two categories
 - **build** : The family build information. Only one is allowed per family and should be named "build". This contains all of the parameters for compiling the simulator binary. 
 - **instance** : Runtime information for a particular experiment (instance) to run on the compiled binary. Multiple are allowed per family and they should be named as integers starting with 0
 
-A sample scenario family subdirectory would look like this 
+A sample scenario family subdirectory would look as such in **SCENARIO_DIR**
 
-+-- example_scenario
-|   +-- build
-|   +-- 0
-|   +-- 1 
-|   +-- 2
+```
+Scenarios
+│   README.md  
+│
+└─── example_scenario
+│   │   build
+│   │   0
+│   │   1
+│   │   2
+
+```
 
 ## Variables 
 The scenario scripts alter various bash variables to configure the simulation environment and runtime. Below is a list of all parameters for family build scripts and instance scripts 
